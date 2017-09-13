@@ -5,15 +5,15 @@ formula <- Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
 
 linreg <- function(formula, data){
     stopifnot()
-    mf <- model.frame(formula, data)
-    mm <- model.matrix(formula, mf)
+    #mf <- model.frame(formula, data)
+    mm <- model.matrix(formula, data)
 
-    dep <- all.vars(expr = formula, functions = )
+    y <- all.vars(expr = formula)[1]
     
     print(class(mm))
-    #return()
+    print(formula)
+    #return(mm)
 }
 
 linreg(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, iris)
-
 
