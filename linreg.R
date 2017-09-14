@@ -1,7 +1,10 @@
+library(ggplot2)
+library(gridExtra)
+
 # linreg ------------------------------------------------------------------
 data <- iris
 formula <- Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
-
+formula <- Petal.Length ~ Species
 
 linreg <- function(formula, data) {
     # Define matrix
@@ -41,7 +44,7 @@ linreg <- function(formula, data) {
         fields = list(
             f_formula = "formula",
             reg_coef = "matrix",
-            fitted_values = "numeric",
+            fitted_values = "matrix",
             resid = "matrix",
             df = "numeric",
             var_resid = "numeric",
@@ -53,10 +56,36 @@ linreg <- function(formula, data) {
             print.linreg <<- function(result) {
                 return(list(Formula_call = result$f_formula,
                             Regression_Coefficients = result$reg_coef))
-            }
-            plot.linreg <<- function(result){
-                ggplot(data = result, aes(x = fitted_values, y = resid)) +
-                    geom_point()
+            },
+            plot.linreg <<- function(result) {
+                plot_df <- data.frame(
+                    resid = result$resid,
+                    fitted_values = result$fitted_values,
+                    y = y
+                )
+                p1 <- ggplot(data = plot_df, aes(x = fitted_values, y = resid)) +
+                    geom_point() +
+                    geom_smooth(method = "loess",
+                                color = "red",
+                                se = FALSE) +
+                    geom_abline(slope = 0,
+                                intercept = 0,
+                                linetype = "dotted") +
+                    ggtitle("Residual vs Fitted") +
+                    ylab("Residuals") +
+                    xlab("Fitted Values")
+                
+                p2 <- ggplot(data = plot_df, 
+                             aes(x = fitted_values, y = sqrt(abs((resid - mean(resid)) / sqrt(result$var_resid))))) +
+                    geom_point() +
+                    geom_smooth(method = "loess",
+                                color = "red",
+                                se = FALSE) +
+                    ggtitle("Scale-Location") +
+                    ylab("sqrt(abs(Standardized Residuals))") +
+                    xlab("Fitted Values")
+             
+               return(grid.arrange(p1, p2))       
             }
         )
     )
@@ -64,7 +93,7 @@ linreg <- function(formula, data) {
     result <- output(
         f_formula = formula,
         reg_coef = beta_hat,
-        fitted_values = y,
+        fitted_values = y_hat,
         resid = e_hat,
         df = df,
         var_resid = sigma_hat,
@@ -75,9 +104,10 @@ linreg <- function(formula, data) {
 }
 eval <- linreg(formula, iris)
 
-print(eval)
 plot(eval)
+print(eval)
 
-library(ggplot2)
-ggplot(data = result, aes(x = fitted_values, y = resid)) +
-    geom_point()
+lin <- lm(formula, iris)
+plot(lin)
+
+table(iris$Species)
