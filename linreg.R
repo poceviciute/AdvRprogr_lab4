@@ -143,11 +143,14 @@ linreg <- function(formula, data) {
 }
 eval <- linreg(formula, iris)
 
+
 summary(eval)
 plot(eval)
 print(eval)
 coef(eval)
 
+# formula <- cyl ~ hp + mpg
+# eval <- linreg(formula, mtcars)
 
 # lin <- lm(formula, iris)
 # plot(lin)
