@@ -87,6 +87,9 @@ linreg <- function(formula, data) {
              
                return(grid.arrange(p1, p2))       
             }
+            resid.linreg <<- function(){
+                
+            }
         )
     )
     
