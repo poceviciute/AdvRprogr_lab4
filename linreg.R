@@ -4,7 +4,7 @@ library(gridExtra)
 # linreg ------------------------------------------------------------------
 data <- iris
 formula <- Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
-formula <- Petal.Length ~ Species
+#formula <- Petal.Length ~ Species
 
 linreg <- function(formula, data) {
     # Define matrix
@@ -86,10 +86,20 @@ linreg <- function(formula, data) {
                     xlab("Fitted Values")
              
                return(grid.arrange(p1, p2))       
+            },
+            resid.linreg <<- function(result) {
+                return(list(Residuals = result$resid))
+            },
+            pred.linreg <<- function(result) {
+                return(list(Fitted_Values = result$fitted_values))
+            },
+            coef.linreg <<- function(result) {
+                vector <- as.vector(result$reg_coef)
+               vect_names <-  rownames(result$reg_coef)
+               names(vector) <-  vect_names
+                return(vector)
             }
-            resid.linreg <<- function(){
-                
-            }
+            
         )
     )
     
@@ -109,8 +119,9 @@ eval <- linreg(formula, iris)
 
 plot(eval)
 print(eval)
+coef(eval)
 
-lin <- lm(formula, iris)
-plot(lin)
+# lin <- lm(formula, iris)
+# plot(lin)
 
 table(iris$Species)
