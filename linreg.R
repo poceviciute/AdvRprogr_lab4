@@ -25,8 +25,8 @@ linreg <- function(formula, data) {
     e_hat <- y - y_hat
     
     # degrees of freedom
-    n <- nrow(X) #number of observations
-    p <- length(all.vars(formula)) - length(dep_name) #number of parameters
+    n <- nrow(X) # number of observations
+    p <- ncol(X) # number of parameters
     
     df <- n - p
     
@@ -51,12 +51,15 @@ linreg <- function(formula, data) {
             p_value = "matrix",
             t_value = "matrix",
             var_res_coef = "matrix"
+            #sd_res_coef = "numeric"
         ),
         methods = list(
+            # Build linreg print function
             print.linreg <<- function(result) {
                 return(list(Formula_call = result$f_formula,
                             Regression_Coefficients = result$reg_coef))
             },
+            # Build linreg plot function
             plot.linreg <<- function(result) {
                 plot_df <- data.frame(
                     resid = result$resid,
@@ -87,22 +90,45 @@ linreg <- function(formula, data) {
              
                return(grid.arrange(p1, p2))       
             },
+            # Build linreg resid print function
             resid.linreg <<- function(result) {
                 return(list(Residuals = result$resid))
             },
+            # Build linreg pred print function
             pred.linreg <<- function(result) {
                 return(list(Fitted_Values = result$fitted_values))
             },
+            # Build linreg coef print function
             coef.linreg <<- function(result) {
                 vector <- as.vector(result$reg_coef)
                vect_names <-  rownames(result$reg_coef)
                names(vector) <-  vect_names
                 return(vector)
+            },
+            # Build linreg summary print function
+            summary.linreg <<- function(result) {
+                coef_mx <- as.matrix(cbind(result$reg_coef,
+                                           round(sqrt(diag(result$var_res_coef)), 3),
+                                           round(result$t_value, 3),
+                                           round(result$p_value, 3)
+                                ))
+                colnames(coef_mx) <- c("Estimate", "Sd. Error", "T-value", "P-value")
+                return(list(
+                    Formula = result$f_formula,
+                    Residuals = c(
+                        Min = min(result$resid),
+                        quantile(result$resid, .25),
+                        Median = median(result$resid),
+                        quantile(result$resid, .75),
+                        Max = max(result$resid)),
+                    Coefficients = coef_mx,
+                    Residual_sd_error = sqrt(result$var_resid),
+                    Degrees_of_Freedom = result$df))
             }
-            
         )
     )
     
+    # Results
     result <- output(
         f_formula = formula,
         reg_coef = beta_hat,
@@ -117,11 +143,13 @@ linreg <- function(formula, data) {
 }
 eval <- linreg(formula, iris)
 
+summary(eval)
 plot(eval)
 print(eval)
 coef(eval)
 
+
 # lin <- lm(formula, iris)
 # plot(lin)
-
-table(iris$Species)
+summary(lin)
+# table(iris$Species)
