@@ -1,13 +1,11 @@
-# library(ggplot2)
-# library(gridExtra)
+#' @title linreg
+#' @name linreg
+#' @param formula a formula, format y ~ x_1 + x_2 + ... + x_n.
+#' @param data a data frame.
+#' @return Returns the result of the Linear Regression
+#' @description Returns the result of the Linear Regression
 
-# linreg ------------------------------------------------------------------
-# data <- iris
-# formula <-
-#     Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
-#formula <- Petal.Length ~ Species
-
-linreg <- function(formula, data) {
+linreg1 <- function(formula, data) {
     # Define matrix
     X <- model.matrix(formula, data)
     
@@ -165,18 +163,11 @@ linreg <- function(formula, data) {
     )
     return(result)
 }
-eval <- linreg(formula, iris)
 
-
-# summary(eval)
-# plot(eval)
+# linreg1(Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width,iris)
+# eval <- linreg1(Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width,iris)
 # print(eval)
-# coef(eval)
-
-# formula <- cyl ~ hp + mpg
-# eval <- linreg(formula, mtcars)
-
-# lin <- lm(formula, iris)
-# plot(lin)
-#summary(lin)
-# table(iris$Species)
+# plot(eval)
+# summary(eval)
+# resid(eval)
+# pred(eval)
