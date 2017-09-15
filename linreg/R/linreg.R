@@ -1,3 +1,11 @@
+#' @title linreg
+#' @name linreg
+#' @param formula a formula, format y ~ x_1 + x_2 + ... + x_n.
+#' @param data a data frame.
+#' @return Returns the result of the Linear Regression
+#' @description Returns the result of the Linear Regression
+
+
 linreg <-
 function(formula, data) {
     # Define matrix

@@ -1,7 +1,7 @@
 \name{linreg}
 \alias{linreg}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{
+\title{linreg
 %%  ~~function to do ... ~~
 }
 \description{
