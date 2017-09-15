@@ -163,5 +163,8 @@ function(formula, data) {
         t_value = t_value,
         var_res_coef = var_beta_hat
     )
-    return(result)
+    result2 <-
+        list(Formula = result$f_formula,
+             Regression_Coefficients = result$reg_coef)
+    return(result2)
 }
