@@ -1,9 +1,11 @@
 library(ggplot2)
 library(gridExtra)
+#install.packages("gridExtra")
 
 # linreg ------------------------------------------------------------------
 data <- iris
-formula <- Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
+formula <-
+    Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
 #formula <- Petal.Length ~ Species
 
 linreg <- function(formula, data) {
@@ -56,8 +58,12 @@ linreg <- function(formula, data) {
         methods = list(
             # Build linreg print function
             print.linreg <<- function(result) {
-                return(list(Formula_call = result$f_formula,
-                            Regression_Coefficients = result$reg_coef))
+                return(
+                    list(
+                        Formula_call = result$f_formula,
+                        Regression_Coefficients = result$reg_coef
+                    )
+                )
             },
             # Build linreg plot function
             plot.linreg <<- function(result) {
@@ -66,7 +72,8 @@ linreg <- function(formula, data) {
                     fitted_values = result$fitted_values,
                     y = y
                 )
-                p1 <- ggplot(data = plot_df, aes(x = fitted_values, y = resid)) +
+                p1 <-
+                    ggplot(data = plot_df, aes(x = fitted_values, y = resid)) +
                     geom_point() +
                     geom_smooth(method = "loess",
                                 color = "red",
@@ -78,8 +85,9 @@ linreg <- function(formula, data) {
                     ylab("Residuals") +
                     xlab("Fitted Values")
                 
-                p2 <- ggplot(data = plot_df, 
-                             aes(x = fitted_values, y = sqrt(abs((resid - mean(resid)) / sqrt(result$var_resid))))) +
+                p2 <- ggplot(data = plot_df,
+                             aes(x = fitted_values, y = sqrt(abs((resid - mean(resid)) / sqrt(result$var_resid)
+                             )))) +
                     geom_point() +
                     geom_smooth(method = "loess",
                                 color = "red",
@@ -87,8 +95,8 @@ linreg <- function(formula, data) {
                     ggtitle("Scale-Location") +
                     ylab("sqrt(abs(Standardized Residuals))") +
                     xlab("Fitted Values")
-             
-               return(grid.arrange(p1, p2))       
+                
+                return(grid.arrange(p1, p2))
             },
             # Build linreg resid print function
             resid.linreg <<- function(result) {
@@ -101,29 +109,45 @@ linreg <- function(formula, data) {
             # Build linreg coef print function
             coef.linreg <<- function(result) {
                 vector <- as.vector(result$reg_coef)
-               vect_names <-  rownames(result$reg_coef)
-               names(vector) <-  vect_names
+                vect_names <-  rownames(result$reg_coef)
+                names(vector) <-  vect_names
                 return(vector)
             },
             # Build linreg summary print function
             summary.linreg <<- function(result) {
-                coef_mx <- as.matrix(cbind(result$reg_coef,
-                                           round(sqrt(diag(result$var_res_coef)), 3),
-                                           round(result$t_value, 3),
-                                           round(result$p_value, 3)
-                                ))
-                colnames(coef_mx) <- c("Estimate", "Sd. Error", "T-value", "P-value")
-                return(list(
-                    Formula = result$f_formula,
-                    Residuals = c(
-                        Min = min(result$resid),
-                        quantile(result$resid, .25),
-                        Median = median(result$resid),
-                        quantile(result$resid, .75),
-                        Max = max(result$resid)),
-                    Coefficients = coef_mx,
-                    Residual_sd_error = sqrt(result$var_resid),
-                    Degrees_of_Freedom = result$df))
+                coef_mx <- as.matrix(cbind(
+                    result$reg_coef,
+                    round(sqrt(diag(
+                        result$var_res_coef
+                    )), 3),
+                    round(result$t_value, 3),
+                    round(result$p_value, 3)
+                ))
+                colnames(coef_mx) <-
+                    c("Estimate", "Sd. Error", "T-value", "P-value")
+                text <-
+                    return(
+                        list(
+                            Formula = result$f_formula,
+                            Residuals = c(
+                                Min = min(result$resid),
+                                quantile(result$resid, .25),
+                                Median = median(result$resid),
+                                quantile(result$resid, .75),
+                                Max = max(result$resid)
+                            ),
+                            Coefficients = coef_mx,
+                            Evaluation = c(
+                                paste(
+                                    "Residual standard error: ",
+                                    round(sqrt(result$var_resid), 4),
+                                    " on ",
+                                    result$df,
+                                    " degrees of freedom"
+                                )
+                            )
+                        )
+                    )
             }
         )
     )
@@ -138,7 +162,8 @@ linreg <- function(formula, data) {
         var_resid = sigma_hat,
         p_value = p_value,
         t_value = t_value,
-        var_res_coef = var_beta_hat)
+        var_res_coef = var_beta_hat
+    )
     return(result)
 }
 eval <- linreg(formula, iris)
@@ -154,5 +179,5 @@ coef(eval)
 
 # lin <- lm(formula, iris)
 # plot(lin)
-summary(lin)
+#summary(lin)
 # table(iris$Species)
