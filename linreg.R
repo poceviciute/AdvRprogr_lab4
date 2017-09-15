@@ -3,9 +3,9 @@ library(gridExtra)
 #install.packages("gridExtra")
 
 # linreg ------------------------------------------------------------------
-data <- iris
-formula <-
-    Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
+# data <- iris
+# formula <-
+#     Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
 #formula <- Petal.Length ~ Species
 
 linreg <- function(formula, data) {
