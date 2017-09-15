@@ -3,8 +3,7 @@
 
 # linreg ------------------------------------------------------------------
 # data <- iris
-# formula <-
-#     Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
+# formula <-     Sepal.Length ~ Species + Sepal.Width + Petal.Length + Petal.Width
 #formula <- Petal.Length ~ Species
 
 linreg <- function(formula, data) {
@@ -124,7 +123,6 @@ linreg <- function(formula, data) {
                 ))
                 colnames(coef_mx) <-
                     c("Estimate", "Sd. Error", "T-value", "P-value")
-                text <-
                     return(
                         list(
                             Formula = result$f_formula,
@@ -163,7 +161,11 @@ linreg <- function(formula, data) {
         t_value = t_value,
         var_res_coef = var_beta_hat
     )
-    return(result)
+    
+    result2 <-
+        list(Formula = result$f_formula,
+             Regression_Coefficients = result$reg_coef)
+    return(result2)
 }
 eval <- linreg(formula, iris)
 
