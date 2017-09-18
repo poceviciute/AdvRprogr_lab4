@@ -64,6 +64,7 @@ function(formula, data) {
                     )
                 )
             },
+            
             # Build linreg plot function
             plot.linreg <<- function(result) {
                 plot_df <- data.frame(
@@ -163,8 +164,9 @@ function(formula, data) {
         t_value = t_value,
         var_res_coef = var_beta_hat
     )
-    result2 <-
-        list(Formula = result$f_formula,
-             Regression_Coefficients = result$reg_coef)
-    return(result2)
+    # Can't print for 
+    # result2 <-
+    #     list(Formula = result$f_formula,
+    #          Regression_Coefficients = result$reg_coef)
+    # return(result2)
 }
