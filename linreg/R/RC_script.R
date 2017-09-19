@@ -70,7 +70,7 @@ linreg <- setRefClass(
         # Build linreg plot function
         plot = function() {
             library(ggplot2)
-            library(gridExtra)
+            
             plot_df <- data.frame(
                 df_resid = e_hat,
                 df_fitted_values = y_hat)
@@ -98,7 +98,7 @@ linreg <- setRefClass(
                 ylab("sqrt(abs(Standardized Residuals))") +
                 xlab("Fitted Values")
             
-            return(grid.arrange(p1, p2))
+            return(list(p1, p2))
         },
         # Build linreg resid print function
         resid = function() {
