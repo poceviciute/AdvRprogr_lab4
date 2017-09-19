@@ -1,25 +1,20 @@
-head(mtcars)
-head(iris)
 
-library(linreg)
-# formula <- hp ~ disp + mpg + cyl
-# data <- mtcars
+linreg_mod <- linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
 
-# formula <- Petal.Length ~ Petal.Width + Sepal.Length + Sepal.Width + Species
-# data <- iris
+# Print
+linreg_mod$print()
 
-eval <- linreg(hp ~ disp + mpg + cyl, mtcars)
-eval <- linreg(Petal.Length ~ Petal.Width + Sepal.Length + Sepal.Width + Species, iris)
+# Plot
+linreg_mod$plot()
 
-eval 
-class(eval)
-str(eval)
+# resid
+linreg_mod$resid()
 
-print(eval)
-plot(eval)
-resid(eval)
-pred(eval)
-coef(eval)
-summary(eval)
+# pred
+linreg_mod$pred()
 
-eval$print.linreg()
+# coef
+linreg_mod$coef()
+
+# summary
+linreg_mod$summary()

@@ -1,6 +1,6 @@
 Package: linreg
 Type: Package
-Title: What the package does (short line)
+Title: Linear regression analysis
 Version: 1.0
 Date: 2017-09-15
 Author: Henrik Karlsson and Milda Pocevicuite
