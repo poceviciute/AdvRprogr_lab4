@@ -98,7 +98,8 @@ linreg <- setRefClass(
                 ylab("sqrt(abs(Standardized Residuals))") +
                 xlab("Fitted Values")
             
-            return(list(p1, p2))
+            return(list(Residual_vs_Fitted = p1, 
+                        Scale_Location = p2))
         },
         # Build linreg resid print function
         resid = function() {
