@@ -102,11 +102,11 @@ linreg <- setRefClass(
         },
         # Build linreg resid print function
         resid = function() {
-            return(list(Residuals = e_hat))
+            return((Residuals = round(e_hat, 2)))
         },
         # Build linreg pred print function
         pred = function() {
-            return(list(Fitted_values = y_hat))
+            return((Fitted_values = round(y_hat, 2)))
         },
         # Build linreg coef print function
         coef = function() {

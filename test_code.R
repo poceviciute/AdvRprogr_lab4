@@ -13,6 +13,12 @@ linreg_mod$resid()
 # pred
 linreg_mod$pred()
 
+c <- linreg_mod$pred()[c(1,5,7)]
+c[0]
+# a <- round(unname(),2)
+b <- c(1.85, 1.53, 1.09)
+a == b
+
 # coef
 linreg_mod$coef()
 
