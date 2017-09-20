@@ -100,12 +100,35 @@ linreg <- setRefClass(
         plot = function() {
             library(ggplot2)
             
+            # Build plotting theme
+            liu_blue <- "#54D8E0"
+            theme_liu <- theme(plot.margin = unit(c(1,1,1,1), "cm"), 
+                           panel.background = element_rect(fill="white"),
+                           panel.grid.major.y = element_blank(),
+                           panel.grid.minor.y = element_blank(),
+                           panel.grid.major.x = element_blank(),
+                           panel.grid.minor.x = element_blank(),
+                           axis.line = element_line(color= "#58585b", size=0.1),
+                           axis.text.x = element_text(color="Black", size="10"),
+                           axis.text.y = element_text(color="Black", size="10"),
+                           axis.title.x = element_text(color="Black", size="10", face="bold"),
+                           axis.title.y = element_text(color="Black", size="10", face="bold"),
+                           axis.ticks.y = element_blank(),
+                           axis.ticks.x = element_line(color = "#58585b", size = 0.3),
+                           plot.title = element_text(color="Black", face="bold", size="14"),
+                           legend.position="bottom", legend.title = element_blank(),
+                           legend.key = element_blank(),
+                           legend.text = element_text(color="Black", size="10"))
+            
+            # Build plot data
             plot_df <- data.frame(
                 df_resid = e_hat,
                 df_fitted_values = y_hat)
-            p1 <-
+           
+            # Build plot1, Residual vs fitted values
+             p1 <-
                 ggplot(data = plot_df, aes(x = df_fitted_values, y = df_resid)) +
-                geom_point() +
+                geom_point(colour = liu_blue) +
                 geom_smooth(method = "loess",
                             color = "red",
                             se = FALSE) +
@@ -114,18 +137,21 @@ linreg <- setRefClass(
                             linetype = "dotted") +
                 ggtitle("Residual vs Fitted") +
                 ylab("Residuals") +
-                xlab("Fitted Values")
+                xlab("Fitted Values") +
+                theme_liu
             
+             # Build plot1, Scale Location
             p2 <- ggplot(data = plot_df,
                          aes(x = df_fitted_values, y = sqrt(abs((df_resid - mean(df_resid)) / sqrt(var_sigma_hat)
                          )))) +
-                geom_point() +
+                geom_point(colour = liu_blue) +
                 geom_smooth(method = "loess",
                             color = "red",
                             se = FALSE) +
                 ggtitle("Scale-Location") +
                 ylab("sqrt(abs(Standardized Residuals))") +
-                xlab("Fitted Values")
+                xlab("Fitted Values") +
+                theme_liu
             
             return(list(Residual_vs_Fitted = p1, 
                         Scale_Location = p2))
