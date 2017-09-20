@@ -181,11 +181,13 @@ linreg <- setRefClass(
                 #     )
                 # )
             
+            # Prints function call
             cat(sep = "\n")
             cat("Call:")
             cat(sep = "\n")
             cat(paste("linreg(", "formula = ", formula[2], " ", formula[1], " ", formula[3], ", ", "data = ", data_name, ")", sep = "" ))
             
+            # Print residuals, ugly output
             cat(sep = "\n")
             cat(sep = "\n")
             cat("Residuals:")
@@ -198,10 +200,12 @@ linreg <- setRefClass(
                       quantile(e_hat, .75),
                       Max = max(e_hat)))
             
+            # Print coef matrix with results and names, still causes errors.
+            cat(sep = "\n")
             cat(sep = "\n")
             cat("Coefficients:")
             cat(sep = "\n")
-            
+            return(coef_mx)
         }
     )
 )
