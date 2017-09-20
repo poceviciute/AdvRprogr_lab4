@@ -20,12 +20,15 @@ linreg <- setRefClass(
         var_sigma_hat = "numeric",
         p_value = "matrix",
         t_value = "matrix",
-        var_beta_hat = "matrix"
+        var_beta_hat = "matrix",
+        data_name = "character"
     ),
     methods = list(
         initialize = function(formula, data){
             formula <<- formula
             data <<- data
+            data_name <<- deparse(substitute(data))
+            
             
             # Define matrix
             X <- model.matrix(formula, data)
@@ -34,7 +37,7 @@ linreg <- setRefClass(
             dep_name <- all.vars(expr = formula)[1]
             y <- (data[, dep_name])
            
-             # calculated the predicted values for beta parameter vector
+            # Calculate coefficients
             beta_hat <<- solve((t(X) %*% X)) %*% t(X) %*% y
             
             # find the fitted values of y using beta_hat
@@ -59,12 +62,38 @@ linreg <- setRefClass(
         },
         # Build linreg print function
         print = function() {
-            return(
-                list(
-                    Formula_call = formula,
-                    Regression_Coefficients = beta_hat
-                )
-            )
+            # Print with help of a list
+            # return(
+            #     list(
+            #         Formula_call = formula,
+            #         Regression_Coefficients = beta_hat
+            #     )
+            # )
+            
+            # Print function call
+            cat(sep = "\n")
+            cat("Call:")
+            cat(sep = "\n")
+            cat(paste("linreg(", "formula = ", formula[2], " ", formula[1], " ", formula[3], ", ", "data = ", data_name, ")", sep = "" ))
+            
+            cat(sep = "\n")
+            cat(sep = "\n")
+            cat("Coefficients:")
+            
+            cat(sep = "\n")
+            
+            # opt1.
+            # Print coef with named vector, causes error in testthat
+            # print_coef <- as.vector(beta_hat)
+            # names(print_coef) <- row.names(beta_hat)
+            # return(print_coef)
+            
+            # opt2.
+            # Print with cat(), error cause by too few blankspaces between output, ugly output
+            cat(row.names(beta_hat))
+            cat(sep = "\n")
+            cat(beta_hat)
+            
         },
         
         # Build linreg plot function
@@ -128,29 +157,53 @@ linreg <- setRefClass(
             ))
             colnames(coef_mx) <-
                 c("Estimate", "Sd. Error", "T-value", "P-value")
-            text <-
-                return(
-                    list(
-                        Formula = formula,
-                        Residuals = c(
-                            Min = min(e_hat),
-                            quantile(e_hat, .25),
-                            Median = median(e_hat),
-                            quantile(e_hat, .75),
-                            Max = max(e_hat)
-                        ),
-                        Coefficients = coef_mx,
-                        Evaluation = c(
-                            paste(
-                                "Residual standard error: ",
-                                round(sqrt(var_sigma_hat), 4),
-                                " on ",
-                                df,
-                                " degrees of freedom"
-                            )
-                        )
-                    )
-                )
+            
+                # return(
+                #     list(
+                #         Formula = formula,
+                #         Residuals = c(
+                #             Min = min(e_hat),
+                #             quantile(e_hat, .25),
+                #             Median = median(e_hat),
+                #             quantile(e_hat, .75),
+                #             Max = max(e_hat)
+                #         ),
+                #         Coefficients = coef_mx,
+                #         Evaluation = c(
+                #             paste(
+                #                 "Residual standard error: ",
+                #                 round(sqrt(var_sigma_hat), 4),
+                #                 " on ",
+                #                 df,
+                #                 " degrees of freedom"
+                #             )
+                #         )
+                #     )
+                # )
+            
+            cat(sep = "\n")
+            cat("Call:")
+            cat(sep = "\n")
+            cat(paste("linreg(", "formula = ", formula[2], " ", formula[1], " ", formula[3], ", ", "data = ", data_name, ")", sep = "" ))
+            
+            cat(sep = "\n")
+            cat(sep = "\n")
+            cat("Residuals:")
+            cat(sep = "\n")
+            cat(c("Min", "1Q", "Median", "3Q", "Max"))
+            cat(sep = "\n")
+            cat(paste(Min = min(e_hat),
+                      quantile(e_hat, .25),
+                      Median = median(e_hat),
+                      quantile(e_hat, .75),
+                      Max = max(e_hat)))
+            
+            cat(sep = "\n")
+            cat("Coefficients:")
+            cat(sep = "\n")
+            
         }
     )
 )
+
+
