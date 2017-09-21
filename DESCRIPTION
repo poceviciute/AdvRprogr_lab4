@@ -10,4 +10,7 @@ License: GPL-2
 Depends: R (>= 3.0.1), ggplot2
 Imports: ggplot2, methods
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests: testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
