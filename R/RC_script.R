@@ -1,8 +1,6 @@
-#' @title linreg
-#' @name linreg
-#' @param formula a formula, format y ~ x_1 + x_2 + ... + x_n.
-#' @param data a data frame.
-#' @return Returns the result of the Linear Regression
+#' @title Linear regression
+#' @field formula a formula, format y ~ x_1 + x_2 + ... + x_n.
+#' @field data a data frame.
 #' @description Returns the result of the Linear Regression
 #' @examples 
 #' data(iris)
