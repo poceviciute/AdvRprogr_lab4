@@ -86,3 +86,8 @@ linreg_example$coef()
 
 linreg_example$summary()
 ```
+
+
+```{r, echo= FALSE}
+sessionInfo()
+```
