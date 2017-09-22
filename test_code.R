@@ -31,3 +31,4 @@ data <- iris
 
 a <- lm(formula, data)
 summary(a)
+print(a)

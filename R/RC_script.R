@@ -174,25 +174,41 @@ linreg <- setRefClass(
         # Build linreg summary print function
         summary = function() {
             coef_mx <- as.matrix(cbind(
-                beta_hat,
+                round(beta_hat, 2),
                 round(sqrt(diag(
                     var_beta_hat
-                )), 3),
-                round(t_value, 3),
-                round(p_value, 3)
+                )), 2),
+                round(t_value, 2),
+                round(p_value, 4)
             ))
+
             colnames(coef_mx) <-
-                c("Estimate", "Sd. Error", "T-value", "P-value")
+                c("Estimate", "Sd.Error", "T-value", "P-value")
+
+            
+            # coef_mx <- data.frame(cbind(
+            #     rownames(beta_hat),
+            #     round(beta_hat, 2),
+            #     round(sqrt(diag(
+            #         var_beta_hat
+            #     )), 2),
+            #     round(t_value, 2),
+            #     round(p_value, 4)
+            # ))
+            # 
+            # names(coef_mx) <- c("", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
+
+            
             
                 # return(
                 #     list(
-                #         Formula = formula,
+                #         Call = paste("linreg(", "formula = ", formula[2], " ", formula[1], " ", formula[3], ", ", "data = ", data_name, ")", sep = "" ),
                 #         Residuals = c(
-                #             Min = min(e_hat),
-                #             quantile(e_hat, .25),
-                #             Median = median(e_hat),
-                #             quantile(e_hat, .75),
-                #             Max = max(e_hat)
+                #             Min = round(min(e_hat), 2),
+                #             round(quantile(e_hat, .25), 2),
+                #             Median = round(median(e_hat), 2),
+                #             round(quantile(e_hat, .75), 2),
+                #             Max = round(max(e_hat), 2)
                 #         ),
                 #         Coefficients = coef_mx,
                 #         Evaluation = c(
@@ -212,26 +228,24 @@ linreg <- setRefClass(
             cat("Call:")
             cat(sep = "\n")
             cat(paste("linreg(", "formula = ", formula[2], " ", formula[1], " ", formula[3], ", ", "data = ", data_name, ")", sep = "" ))
+
             
-            # Print residuals, ugly output
-            cat(sep = "\n")
-            cat(sep = "\n")
-            cat("Residuals:")
-            cat(sep = "\n")
-            cat(c("Min", "1Q", "Median", "3Q", "Max"))
-            cat(sep = "\n")
-            cat(paste(Min = min(e_hat),
-                      quantile(e_hat, .25),
-                      Median = median(e_hat),
-                      quantile(e_hat, .75),
-                      Max = max(e_hat)))
-            
+
             # Print coef matrix with results and names, still causes errors.
             cat(sep = "\n")
             cat(sep = "\n")
             cat("Coefficients:")
             cat(sep = "\n")
-            return(coef_mx)
+            cat(format(coef_mx, width=max(nchar(coef_mx), nchar(coef_mx)), justify = c("right")))
+            cat(sep = "\n")
+            for(i in 1:nrow(coef_mx)){
+                cat(coef_mx[i, ])
+                cat(sep = "\n")
+            }
+
+            # Print df
+            cat(sep = "\n")
+            cat("Residual standard error:", round(sqrt(var_sigma_hat), 2), "on ", df, "degrees of freedom")
         }
     )
 )
