@@ -16,7 +16,7 @@ linreg <- setRefClass(
         beta_hat = "matrix",
         y_hat = "matrix",
         e_hat = "matrix",
-        df = "numeric",
+        df_linreg = "numeric",
         var_sigma_hat = "numeric",
         p_value = "matrix",
         t_value = "matrix",
@@ -50,15 +50,15 @@ linreg <- setRefClass(
             n <- nrow(X) # number of observations
             p <- ncol(X) # number of parameters
             
-            df <<- n - p
+            df_linreg <<- n - p
             
             # residual variance
-            var_sigma_hat <<- as.numeric((t(e_hat) %*% e_hat) / df)
+            var_sigma_hat <<- as.numeric((t(e_hat) %*% e_hat) / df_linreg)
             var_beta_hat <<- var_sigma_hat * solve((t(X) %*% X))
             
             #The t-values for each coefficient
             t_value <<- beta_hat / sqrt(diag(var_beta_hat))
-            p_value <<- pt(t_value, df = df)
+            p_value <<- pt(abs(t_value), df = df_linreg,lower.tail=FALSE)
         },
         # Build linreg print function
         print = function() {
@@ -149,7 +149,7 @@ linreg <- setRefClass(
                             color = "red",
                             se = FALSE) +
                 ggtitle("Scale-Location") +
-                ylab("sqrt(abs(Standardized Residuals))") +
+                ylab(expression(sqrt(abs("Standardized Residuals")))) +
                 xlab("Fitted Values") +
                 theme_liu
             
@@ -173,21 +173,7 @@ linreg <- setRefClass(
         },
         # Build linreg summary print function
         summary = function() {
-            coef_mx <- as.matrix(cbind(
-                round(beta_hat, 2),
-                round(sqrt(diag(
-                    var_beta_hat
-                )), 2),
-                round(t_value, 2),
-                round(p_value, 4)
-            ))
-
-            colnames(coef_mx) <-
-                c("Estimate", "Sd.Error", "T-value", "P-value")
-
-            
-            # coef_mx <- data.frame(cbind(
-            #     rownames(beta_hat),
+            # coef_mx <- as.matrix(cbind(
             #     round(beta_hat, 2),
             #     round(sqrt(diag(
             #         var_beta_hat
@@ -196,9 +182,49 @@ linreg <- setRefClass(
             #     round(p_value, 4)
             # ))
             # 
-            # names(coef_mx) <- c("", "Estimate", "Std. Error", "t value", "Pr(>|t|)")
+            # colnames(coef_mx) <-
+            #     c("Estimate", "Sd.Error", "T-value", "P-value")
 
+            coef_mx <- data.frame(
+                var = rownames(beta_hat),
+                estimate = round(beta_hat, 2),
+                std.error = round(sqrt(diag(
+                    var_beta_hat
+                )), 2),
+               t_value = round(t_value, 2),
+               p_value = round(p_value, 4)
+            )
+        
+            coef_mx$var <- as.character(coef_mx$var)
+            # str(coef_mx)
+            row.names(coef_mx) <- NULL
+
+            coef_mx <- rbind(c(" ", "Estimate", "Std. Error", "t value", "Pr(>|t|)"), coef_mx)
+        
+            for(i in 2:nrow(coef_mx)){
+                if(coef_mx$p_value[i] == 0){
+                    coef_mx$p_value[i] <- "***"
+                } else if(coef_mx$p_value[i] > 0 & coef_mx$p_value[i] <= 0.001){
+                    coef_mx$p_value[i] <- "**"
+                } else if(coef_mx$p_value[i] > 0.001 & coef_mx$p_value[i] <= 0.01){
+                    coef_mx$p_value[i] <- "*"
+                } else if(coef_mx$p_value[i] > 0.01 & coef_mx$p_value[i] <= 0.05){
+                    coef_mx$p_value[i] <- "."
+                } else if(coef_mx$p_value[i] > 0.05 & coef_mx$p_value[i] <= 0.1){
+                    coef_mx$p_value[i] <- " "
+                } else if(coef_mx$p_value[i] > 0.1){
+                    coef_mx$p_value[i] <- " "
+                }
+            }
             
+            
+
+            for(c in 1:ncol(coef_mx)){
+                wdth <- max(nchar(as.character(coef_mx[, c])), na.rm = TRUE)
+                for(r in 1:nrow(coef_mx)){
+                    coef_mx[r, c] <- format(coef_mx[r, c], width = wdth, justify = c("right"))
+                }
+            }
             
                 # return(
                 #     list(
@@ -236,16 +262,16 @@ linreg <- setRefClass(
             cat(sep = "\n")
             cat("Coefficients:")
             cat(sep = "\n")
-            cat(format(coef_mx, width=max(nchar(coef_mx), nchar(coef_mx)), justify = c("right")))
+            #cat(format(coef_mx, width=max(nchar(coef_mx), nchar(coef_mx)), justify = c("right")))
             cat(sep = "\n")
             for(i in 1:nrow(coef_mx)){
-                cat(coef_mx[i, ])
+                cat(paste(as.character(coef_mx[i, ]),collapse = " "))
                 cat(sep = "\n")
             }
 
             # Print df
             cat(sep = "\n")
-            cat("Residual standard error:", round(sqrt(var_sigma_hat), 2), "on ", df, "degrees of freedom")
+            cat("Residual standard error:", round(sqrt(var_sigma_hat), 2), "on", df_linreg, "degrees of freedom")
         }
     )
 )
