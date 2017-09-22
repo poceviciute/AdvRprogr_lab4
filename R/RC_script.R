@@ -7,6 +7,14 @@
 #' @import methods
 #' @export linreg
 #' @exportClass linreg
+#' @examples 
+#' data(iris)
+#' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$print()
+#' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$plot()
+#' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$resid()
+#' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$pred()
+#' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$coef()
+#' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$summary()
 
 linreg <- setRefClass(
     Class = "linreg",
