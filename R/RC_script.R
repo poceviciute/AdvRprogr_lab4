@@ -4,9 +4,6 @@
 #' @param data a data frame.
 #' @return Returns the result of the Linear Regression
 #' @description Returns the result of the Linear Regression
-#' @import methods
-#' @export linreg
-#' @exportClass linreg
 #' @examples 
 #' data(iris)
 #' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$print()
@@ -15,6 +12,8 @@
 #' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$pred()
 #' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$coef()
 #' linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)$summary()
+#' @export linreg
+#' @export
 
 linreg <- setRefClass(
     Class = "linreg",

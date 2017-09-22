@@ -2,6 +2,8 @@ rm(list = ls())
 
 # devtools::install_github("poceviciute/AdvRprogr_lab4")
 
+# devtools::install_github("poceviciute/AdvRprogr_lab4", build_vignettes = TRUE)
+
 library(linreg)
 linreg_mod <- linreg$new(Petal.Length~Sepal.Width+Sepal.Length, data=iris)
 
